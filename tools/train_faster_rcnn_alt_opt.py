@@ -26,14 +26,17 @@ import multiprocessing as mp
 import cPickle
 import shutil
 
+
+
+
 def parse_args():
     """
     Parse input arguments
     """
     parser = argparse.ArgumentParser(description='Train a Faster R-CNN network')
-    parser.add_argument('--gpu', dest='gpu_id',
-                        help='GPU device id to use [0]',
-                        default=0, type=int)
+#    parser.add_argument('--gpu', dest='gpu_id',
+ #                       help='GPU device id to use [0]',
+                        #default=0, type=int)
     parser.add_argument('--net_name', dest='net_name',
                         help='network name (e.g., "ZF")',
                         default=None, type=str)
@@ -45,7 +48,7 @@ def parse_args():
                         default=None, type=str)
     parser.add_argument('--imdb', dest='imdb_name',
                         help='dataset to train on',
-                        default='voc_2007_trainval', type=str)
+                        default='voc_2012_trainval', type=str)
     parser.add_argument('--set', dest='set_cfgs',
                         help='set config keys', default=None,
                         nargs=argparse.REMAINDER)
@@ -99,8 +102,8 @@ def _init_caffe(cfg):
     np.random.seed(cfg.RNG_SEED)
     caffe.set_random_seed(cfg.RNG_SEED)
     # set up caffe
-    caffe.set_mode_gpu()
-    caffe.set_device(cfg.GPU_ID)
+    caffe.set_mode_cpu()
+    #caffe.set_device(cfg.GPU_ID)
 
 def train_rpn(queue=None, imdb_name=None, init_model=None, solver=None,
               max_iters=None, cfg=None):
@@ -210,7 +213,7 @@ if __name__ == '__main__':
         cfg_from_file(args.cfg_file)
     if args.set_cfgs is not None:
         cfg_from_list(args.set_cfgs)
-    cfg.GPU_ID = args.gpu_id
+    #cfg.GPU_ID = args.gpu_id
 
     # --------------------------------------------------------------------------
     # Pycaffe doesn't reliably free GPU memory when instantiated nets are
